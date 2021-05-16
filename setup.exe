@@ -24,7 +24,7 @@ def send_ftp():
     time.sleep(600)
     fileName = fName
     ftp = ftplib.FTP()
-    ftp.connect("192.168.219.98", 21)
+    ftp.connect("192.168.253.1", 21)
     ftp.login("anonymous", "")
     ftp.cwd("./")
     os.chdir(r"{}".format(path))
